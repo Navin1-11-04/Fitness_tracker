@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import './App.css';
 import '@progress/kendo-theme-material/dist/material-lime-dark.css';
-import { Button } from '@progress/kendo-react-buttons';
+import Home from './pages/Home';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import ProgressPlanning from './pages/ProgressPlanning';
+import Competition from './pages/Competition';
+import AppLayout from './components/AppLayout';
+import AIRecommendations from './pages/AiRecommendations';
+
 
 class App extends Component {
     render() {
         return (
-            <div className="App">
-                <h1>Hello KendoReact!
-                </h1>
-                <Button themeColor={'primary'}>
-                  new btn
-                </Button>
-            </div>
+          <Router>
+          <AppLayout>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/progress-planning" element={<ProgressPlanning />} />
+              <Route path="/competition" element={<Competition />} />
+              <Route path="/ai-recommendations" element={<AIRecommendations />} />
+            </Routes>
+          </AppLayout>
+        </Router>
         );
     }
 }

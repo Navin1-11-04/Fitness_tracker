@@ -1,0 +1,141 @@
+*{
+  padding:0;
+  margin:0;
+  box-sizing: border-box;
+}
+body{
+  background-color:#1c1c1c;
+}
+.App{
+  width:100%;
+  height:100dvh;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  padding:1% 2%;
+  justify-content: center;
+}
+.app-container {
+  font-family: Arial, sans-serif;
+}
+
+.light-theme {
+  background-color: #f5f7f5;
+  color: #333;
+}
+
+.dark-theme {
+  background-color: #333;
+  color: #f5f7f5;
+}
+
+/* Top Bar */
+.top-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fff;
+  border-bottom: none !important; /* Remove dotted line */
+}
+
+.top-bar-right {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.app-name {
+  margin: 0 20px;
+}
+
+.content {
+  padding: 20px;
+}
+
+/* Home Page */
+.home-container {
+  padding: 20px;
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.streak-counter {
+  grid-column: 1 / 2;
+  text-align: center;
+  background-color: #4caf50;
+  color: white;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.daily-challenge {
+  grid-column: 2 / 4;
+  background-color: #ffca28;
+  padding: 10px;
+}
+
+.metrics-row {
+  grid-column: 1 / 4;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.metric-card {
+  flex: 1;
+  text-align: center;
+  background-color: #e8f5e9;
+}
+
+.recent-activities {
+  grid-column: 1 / 3;
+}
+
+.quote {
+  grid-column: 1 / 4;
+  text-align: center;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+.k-floatingactionbutton {
+  background-color: #4caf50;
+  color: white;
+}
+
+/* Progress and Planning Page */
+.progress-planning-container {
+  padding: 20px;
+}
+
+.log-workout, .progress-tracker, .calendar-view, .workout-list {
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.workout-item {
+  margin-bottom: 10px;
+}
+
+/* Competition Page */
+.competition-container {
+  padding: 20px;
+}
+
+.leaderboard {
+  margin-bottom: 20px;
+}
