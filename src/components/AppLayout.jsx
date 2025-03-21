@@ -1,20 +1,20 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@progress/kendo-react-buttons";
 import { useAuth } from "../AuthContext.js";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase_config";
-import { Icon } from "@progress/kendo-react-common";
+import { Typography } from '@progress/kendo-react-common';
 
 const sidebarItems = [
-  { icon: "home", route: "/" },
-  { icon: "chart-line", route: "/progress-planning" },
-  { icon: "trophy", route: "/competition" },
-  { icon: "bulb", route: "/ai-recommendations" },
+  { icon: "fa-solid fa-house", route: "/" },
+  { icon: "fa-solid fa-calendar", route: "/progress-planning" },
+  { icon: "fa-solid fa-ranking-star", route: "/competition" },
+  { icon: "fa-solid fa-lightbulb", route: "/ai-recommendations" },
 ];
-
 const AppLayout = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation(); 
   const { user } = useAuth();
 
   const handleLogout = async () => {
@@ -23,30 +23,46 @@ const AppLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex h-screen">
-      <div className="bg-gray-900 text-white w-16 flex flex-col items-center py-6 space-y-6">
-        {sidebarItems.map((item, index) => (
-          <Button
-            key={index}
-            fillMode="flat"
-            icon={`k-i-${item.icon}`}
-            themeColor="dark"
-            size="large"
-            onClick={() => navigate(item.route)}
-            className="p-4"
-          />
-        ))}
+    <div className="app">
+      <div className="header">
+        <h2 className="app-name">MoveUP</h2>
+        {user && (
+          <Button themeColor="error" onClick={handleLogout} className="logout-btn">
+            Logout<i class="fa-solid fa-xmark" style={{marginLeft:'10px'}}></i>
+          </Button>
+        )}
       </div>
-      <div className="flex-1">
-        <div className="flex items-center justify-between bg-gray-800 p-4 text-white">
-          <span className="app-name text-lg font-bold">MoveUP</span>
-          {user && (
-            <Button themeColor="error" onClick={handleLogout} className="px-4 py-2">
-              Logout
-            </Button>
-          )}
+      <div className="main">
+        <div className="sidebar">
+          {sidebarItems.map((item, index) => {
+            const isActive = location.pathname === item.route;
+            return (
+              <Button
+                key={index}
+                fillMode="flat"
+                themeColor="dark"
+                size="large"
+                onClick={() => navigate(item.route)}
+                className={`sidebar-btn ${isActive ? "active" : ""}`}
+                style={{
+                  background: isActive ? "#cddc39" : "transparent",
+                  color: isActive ? "#cddc39" : "#fff",
+                  borderRadius: "999px",
+                  height: "45px",
+                  width: "45px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "15px",
+                  transition: "background 0.3s, color 0.3s",
+                }}
+              >
+               <i className={item.icon}></i> 
+              </Button>
+            );
+          })}
         </div>
-        <div className="p-4">{children}</div>
+        <div className="content">{children}</div>
       </div>
     </div>
   );

@@ -1,148 +1,117 @@
-*{
-  padding:0;
-  margin:0;
+* {
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
 }
-body{
-  background-color:#1c1c1c;
-}
-.App{
-  width:100%;
+
+body {
+  background-color: #121212;
+  color: #fff;
   height:100dvh;
-  display: flex;
-  flex-direction:column;
-  align-items: center;
-  padding:1% 2%;
-  justify-content: center;
-}
-.app-container {
-  font-family: Arial, sans-serif;
+  width:100%;
 }
 
-.light-theme {
-  background-color: #f5f7f5;
-  color: #333;
-}
-
-.dark-theme {
-  background-color: #333;
-  color: #f5f7f5;
-}
-
-/* Top Bar */
-.top-bar {
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #fff;
-  border-bottom: none !important; /* Remove dotted line */
-}
-
-.top-bar-right {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-}
-
-.app-name {
-  margin: 0 20px;
-}
-
-.content {
-  padding: 20px;
-}
-
-/* Home Page */
-.home-container {
-  padding: 20px;
-}
-
-.main-content {
+.app {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: 100%;
+  height:100dvh;
+  width: 100%;
+  padding:20px;
+
 }
 
-.streak-counter {
-  grid-column: 1 / 2;
-  text-align: center;
-  background-color: #4caf50;
-  color: white;
-  animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-.daily-challenge {
-  grid-column: 2 / 4;
-  background-color: #ffca28;
-  padding: 10px;
-}
-
-.metrics-row {
-  grid-column: 1 / 4;
+.header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  height:50px;
+  width: 100%;
+  padding-bottom:20px;
+}
+.app-name{
+  color:#cddc39;
+  font-weight:600;
+}
+.logout-btn {
+  padding:0.5rem 1rem;
+  background-color:#cddc39;
+  color:#1c1c1c;
+  border: none;
+  cursor: pointer;
+  border-radius:999px;
+  font-size:14px;
+  font-weight:450;
+  display: flex;
+  align-items: center;
+  justify-content:center;
 }
 
-.metric-card {
-  flex: 1;
-  text-align: center;
-  background-color: #e8f5e9;
+.main {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  width: 100%;
+  height: 100%;
 }
 
-.recent-activities {
-  grid-column: 1 / 3;
-}
-
-.quote {
-  grid-column: 1 / 4;
-  text-align: center;
-  font-style: italic;
-  margin-top: 20px;
-}
-
-.k-floatingactionbutton {
-  background-color: #4caf50;
-  color: white;
-}
-
-/* Progress and Planning Page */
-.progress-planning-container {
-  padding: 20px;
-}
-
-.log-workout, .progress-tracker, .calendar-view, .workout-list {
-  margin-bottom: 20px;
-}
-
-.form-group {
+.sidebar {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  padding-right:20px;
+  height: 100%;
 }
 
-.workout-item {
-  margin-bottom: 10px;
+.content{
+  background-color:#212121;
+  border-radius:10px;
+  width:100%;
+  height:100%;
+  overflow: hidden;
+  padding:20px;
+  overflow: hidden;
 }
 
-/* Competition Page */
-.competition-container {
-  padding: 20px;
+.home{
+  width:100%;
+  height:100%;
+  display: flex;
+}
+.grid-container {
+  width: 100%;
+  height:100%;
 }
 
-.leaderboard {
-  margin-bottom: 20px;
-}
-.bars{
-  border-radius:20px;
+.card {
+  border-radius:10px;
+  height:100%;
+  display: flex;
 }
 
-/* .k-progressbar-label {
+.card-content {
+  width: 100%;
+  height: 100%;
+}
+
+.grid-container > :nth-child(1) .card { background-color: #212121; }
+.grid-container > :nth-child(2) .card { background-color: #121212; }
+.grid-container > :nth-child(3) .card { background-color: #212121; }
+.grid-container > :nth-child(4) .card { background-color: #212121; }
+.grid-container > :nth-child(5) .card { background-color: #1c1c1c; }
+.grid-container > :nth-child(6) .card { background-color: #212121; }
+.grid-container > :nth-child(7) .card { background-color: #fff; }
+.grid-container > :nth-child(8) .card { background-color: #fff; }
+.grid-container > :nth-child(9) .card { background-color: #fff; }
+
+@media (max-width: 768px) {
+  .grid-container {
+    padding: 10px;
+  }
   
-} */
+  .card {
+    padding:10px;
+  }
+}

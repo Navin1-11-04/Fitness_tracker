@@ -6,7 +6,8 @@ import AIRecommendations from './pages/AiRecommendations';
 import AppLayout from './components/AppLayout';
 import Auth from './pages/Auth';
 import ProtectedRoute from './ProtectedRoute.js';
-import '@progress/kendo-theme-material/dist/material-aqua-dark.css';
+import './App.css'
+import "@progress/kendo-theme-material/dist/material-lime-dark.css";
 
 const App = () => {
   return (
