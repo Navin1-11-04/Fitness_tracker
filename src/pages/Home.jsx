@@ -6,10 +6,13 @@ import { Button, FloatingActionButton } from '@progress/kendo-react-buttons';
 import { Notification, NotificationGroup } from '@progress/kendo-react-notification';
 import { ProgressBar } from '@progress/kendo-react-progressbars';
 import { Animation } from '@progress/kendo-react-animation';
+import { Avatar } from '@progress/kendo-react-layout';
+
+import { Typography } from '@progress/kendo-react-common';
+import QuickTipsCard from '../components/QuickTipsCard';
 
 const Home = () => {
   const navigate = useNavigate();
-  const [darkMode, setDarkMode] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
   const [streakProgress, setStreakProgress] = useState(70);
   const [showAnimation, setShowAnimation] = useState(true);
@@ -35,36 +38,117 @@ const Home = () => {
   const dailyChallenge = 'Do 50 squats today!';
   const quote = 'Keep pushing forward!';
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-    document.body.className = darkMode ? 'light-theme' : 'dark-theme';
+
+  const userProfile = {
+    name: 'John Smith',
+    avatarInitials: 'JS',
+    totalSteps: 120000,
+    totalCalories: 8500,
   };
 
+  const streakHistory = [
+    { date: '2025-03-15', streak: 3 },
+    { date: '2025-03-16', streak: 4 },
+    { date: '2025-03-17', streak: 5 },
+    { date: '2025-03-18', streak: 6 },
+    { date: '2025-03-19', streak: 2 },
+    { date: '2025-03-20', streak: 4 },
+    { date: '2025-03-21', streak: 7 }, 
+  ];
+
+  const quickTips = [
+    'Stay hydrated—drink 8 glasses of water daily!',
+    'Aim for 150 minutes of moderate exercise per week.',
+    'Incorporate stretching to improve flexibility.',
+    'Get 7-8 hours of sleep for optimal recovery.',
+  ];
+  const getLast7Days = () => {
+    const today = new Date();
+    return Array.from({ length: 7 }, (_, i) => {
+      const date = new Date();
+      date.setDate(today.getDate() - i);
+      return {
+        fullDate: date.toISOString().split('T')[0],
+        shortName: date.toLocaleDateString('en-US', { weekday: 'short' })
+      };
+    }).reverse();
+  };
+  
+  const last7Days = getLast7Days();
+  
+    
+  const getCurrentWeek = () => {
+    const today = new Date();
+    const dayOfWeek = today.getDay(); 
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+  
+    return Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(monday);
+      date.setDate(monday.getDate() + i);
+      return {
+        fullDate: date.toISOString().split('T')[0], 
+        shortName: date.toLocaleDateString('en-US', { weekday: 'short' }),
+        isToday: date.toISOString().split('T')[0] === today.toISOString().split('T')[0] 
+      };
+    });
+  };
+
+  const currentWeek = getCurrentWeek();
+
+
+ const streakData = last7Days.map(day => {
+  const found = streakHistory.find(entry => entry.date === day.fullDate);
+  return { date: day.fullDate, shortName: day.shortName, tasksCompleted: found ? found.streak : 0 };
+});
+
+const maxTasks = Math.max(...streakData.map(entry => entry.tasksCompleted), 1);
+  
   const acceptChallenge = () => {
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 3000);
     setStreakProgress(streakProgress + 10);
   };
 
-  return (
-    <div className={`home-container ${darkMode ? 'dark-theme' : 'light-theme'}`} style={styles.container}>
-      <div style={styles.topBar}>
-        <Button onClick={toggleDarkMode} style={styles.toggleButton}>
-          {darkMode ? 'Light Mode' : 'Dark Mode'}
-        </Button>
-      </div>
+  const shareAchievement = () => {
+    alert('Sharing your streak on social media! (Simulated)');
+  };
 
+  return (
+    <div className="home-container" style={styles.container}>
       <Animation enter={showAnimation} exit={!showAnimation}>
         <div style={styles.mainContent}>
-          {/* Streak Progress */}
           <Card style={styles.card}>
-            <CardHeader>Current Streak</CardHeader>
-            <CardBody>
-              <ProgressBar value={streakProgress} max={100} animation={true} />
-            </CardBody>
-          </Card>
-
-          {/* Daily Challenge */}
+  <CardHeader>Streak History</CardHeader>
+  <CardBody style={styles.streakHistory}>
+    {streakData.map((entry, index) => (
+      <div key={index} style={styles.streakBarContainer}>
+        <div style={styles.progressWrapper}>
+          <ProgressBar
+            value={(entry.tasksCompleted / maxTasks) * 100}
+            max={100}
+            label={() => (
+              <span style={styles.progressLabel}>
+                {entry.tasksCompleted}
+              </span>
+            )}
+            orientation="vertical"
+            style={{
+              borderRadius: '999px',
+              width: '25px',
+              height: '250px',
+              opacity: index !== last7Days.length - 1 ? 0.3 : 1, 
+            }}
+            progressStyle={{ borderRadius: '999px' }} 
+          />
+        </div>
+        <Typography.h5 variant="body2" style={styles.streakLabel}>
+          {entry.shortName}
+        </Typography.h5>
+      </div>
+    ))}
+  </CardBody>
+</Card>
           <Card style={styles.card}>
             <CardHeader>Daily Challenge</CardHeader>
             <CardBody>
@@ -73,7 +157,6 @@ const Home = () => {
             </CardBody>
           </Card>
 
-          {/* Metrics */}
           <div style={styles.metricsGrid}>
             {metrics.map((metric, index) => (
               <Card key={index} style={styles.metricCard}>
@@ -85,19 +168,6 @@ const Home = () => {
             ))}
           </div>
 
-          {/* Leaderboard (Scrollable for Small Screens) */}
-          <Card style={styles.card}>
-            <CardHeader>Top Performers</CardHeader>
-            <CardBody style={styles.scrollable}>
-              <Grid data={leaderboard} sortable={true}>
-                <GridColumn field="rank" title="Rank" />
-                <GridColumn field="name" title="Name" />
-                <GridColumn field="steps" title="Steps" />
-              </Grid>
-            </CardBody>
-          </Card>
-
-          {/* Recent Activities (Scrollable for Small Screens) */}
           <Card style={styles.card}>
             <CardHeader>Recent Activities</CardHeader>
             <CardBody style={styles.scrollable}>
@@ -109,7 +179,6 @@ const Home = () => {
             </CardBody>
           </Card>
 
-          {/* Upcoming Challenges */}
           <Card style={styles.card}>
             <CardHeader>Upcoming Challenges</CardHeader>
             <CardBody>
@@ -119,6 +188,10 @@ const Home = () => {
                 ))}
               </ul>
             </CardBody>
+          </Card>
+
+          <Card style={styles.card}>
+            <QuickTipsCard/>
           </Card>
 
           <p style={styles.quote}>"{quote}"</p>
@@ -143,7 +216,6 @@ const Home = () => {
   );
 };
 
-/* 🔹 Responsive Styles */
 const styles = {
   container: {
     maxWidth: '1200px',
@@ -165,8 +237,49 @@ const styles = {
     gap: '16px',
   },
   card: {
-    padding: '16px',
-    borderRadius: '8px',
+    padding: '10px 5px',
+    borderRadius: '15px',
+  },
+  profileSummary: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
+  },
+  avatar: {
+    backgroundColor: '#1976d2',
+    color: 'white',
+  },
+  progressLabel:{
+    position:'absolute',
+    fontSize:'10px',
+    display:'flex',
+    alignItems:'center',
+    justifyContent:'center',
+    borderRadius:'999px',
+    top:'-30px',
+    height:'25px',
+    left:'-22px',
+    width:'20px',
+    transform:'rotate(-90deg)'
+  },
+  shareButton: {
+    marginTop: '10px',
+  },
+  streakHistory: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'flex-end',
+    height: '350px',
+    overflowX: 'auto',
+  },
+  streakBarContainer: {
+    display: 'flex',
+    flexDirection:'column',
+    alignItems: 'center',
+    gap: '5px',
+  },
+  streakLabel: {
+    fontSize: '12px',
   },
   metricsGrid: {
     display: 'grid',
@@ -180,6 +293,10 @@ const styles = {
   scrollable: {
     overflowX: 'auto',
     maxHeight: '200px',
+  },
+  carouselItem: {
+    textAlign: 'center',
+    padding: '10px',
   },
   quote: {
     fontStyle: 'italic',
@@ -199,6 +316,20 @@ const mediaStyles = `
     }
     .card {
       padding: 12px;
+    }
+    .profile-summary {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .streak-history {
+      height: 120px;
+    }
+    .streak-bar {
+      height: 80px;
+      width: 15px;
+    }
+    .streak-label {
+      font-size: 10px;
     }
   }
 `;

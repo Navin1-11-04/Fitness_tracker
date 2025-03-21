@@ -139,3 +139,10 @@ body{
 .leaderboard {
   margin-bottom: 20px;
 }
+.bars{
+  border-radius:20px;
+}
+
+/* .k-progressbar-label {
+  
+} */

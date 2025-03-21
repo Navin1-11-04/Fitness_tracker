@@ -1,49 +1,53 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Drawer, DrawerContent } from '@progress/kendo-react-layout';
-import { Button } from '@progress/kendo-react-buttons';
-import '../App.css';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@progress/kendo-react-buttons";
+import { useAuth } from "../AuthContext.js";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase_config";
+import { Icon } from "@progress/kendo-react-common";
 
-const drawerItems = [
-  { text: 'Home', route: '/' },
-  { text: 'Progress & Plan', route: '/progress-planning' },
-  { text: 'Compete', route: '/competition' },
-  { text: 'Get Tips', route: '/ai-recommendations' },
+const sidebarItems = [
+  { icon: "home", route: "/" },
+  { icon: "chart-line", route: "/progress-planning" },
+  { icon: "trophy", route: "/competition" },
+  { icon: "bulb", route: "/ai-recommendations" },
 ];
 
 const AppLayout = ({ children }) => {
   const navigate = useNavigate();
-  const [drawerExpanded, setDrawerExpanded] = useState(false);
-  const [selected, setSelected] = useState(drawerItems.findIndex(x => x.route === window.location.pathname));
+  const { user } = useAuth();
 
-  const handleDrawerSelect = (e) => {
-    navigate(e.itemTarget.props.route);
-    setSelected(e.itemIndex);
-    setDrawerExpanded(false);
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/auth");
   };
 
   return (
-    <div>
-      <div className="custom-toolbar">
-        <Button fillMode="flat" onClick={() => setDrawerExpanded(!drawerExpanded)}>☰</Button>
-        <span className="app-name">MoveUP</span>
+    <div className="flex h-screen">
+      <div className="bg-gray-900 text-white w-16 flex flex-col items-center py-6 space-y-6">
+        {sidebarItems.map((item, index) => (
+          <Button
+            key={index}
+            fillMode="flat"
+            icon={`k-i-${item.icon}`}
+            themeColor="dark"
+            size="large"
+            onClick={() => navigate(item.route)}
+            className="p-4"
+          />
+        ))}
       </div>
-
-      <Drawer
-        expanded={drawerExpanded}
-        position="start"
-        mode="push"
-        mini={true}
-        items={drawerItems.map((item, index) => ({
-          ...item,
-          selected: index === selected,
-        }))}
-        onSelect={handleDrawerSelect}
-      >
-        <DrawerContent>
-          <div className="content">{children}</div>
-        </DrawerContent>
-      </Drawer>
+      <div className="flex-1">
+        <div className="flex items-center justify-between bg-gray-800 p-4 text-white">
+          <span className="app-name text-lg font-bold">MoveUP</span>
+          {user && (
+            <Button themeColor="error" onClick={handleLogout} className="px-4 py-2">
+              Logout
+            </Button>
+          )}
+        </div>
+        <div className="p-4">{children}</div>
+      </div>
     </div>
   );
 };
